@@ -1,0 +1,474 @@
+:root {
+    --bar-margin: 80px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/pressstart2p/v16/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+
+}
+
+html {
+    -webkit-text-size-adjust: none;
+}
+
+body { 
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    /* background-color: #3b7b7a; */
+    background-color: #89baab;
+    /* background-color: gray; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+        radial-gradient(#5d8da2 1px, transparent 1px);
+    background-size: 8px 8px, 5px 5px;
+
+    background-image:
+        radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+
+    background-size: 3px 3px, 5px 5px;
+    background-position: 0 0, 1px 1px;
+}
+
+
+
+.btn-8bit,
+.form-8bit {
+    --border: 4px;
+    --pixel-border: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(33,37,41)" /></svg>');
+    --top-box-shadow: inset var(--border) var(--border) var(--color-shadow);
+    --bottom-box-shadow: inset calc(-1 * var(--border)) calc(-1 * var(--border)) var(--color-shadow);
+    --bottom-box-shadow-hover: inset calc(-3/2 * var(--border)) calc(-3/2 * var(--border)) var(--color-shadow);
+
+    position: relative;
+    cursor: pointer;
+    font-family: "Press Start 2P";
+
+    border: var(--border) solid;
+    border-image: var(--pixel-border) 2 / 2 / 2 stretch;
+}
+.btn-8bit::after,
+.form-8bit::after {
+    position: absolute;
+    top: calc(-1 * var(--border));
+    right: calc(-1 * var(--border));
+    bottom: calc(-1 * var(--border));
+    left: calc(-1 * var(--border));
+    content: "";
+    box-shadow: var(--bottom-box-shadow);
+}
+.btn-8bit:hover::after { box-shadow: var(--bottom-box-shadow-hover); }
+.btn-8bit:active::after { box-shadow: var(--top-box-shadow); }
+@media (hover: none) { /* Remove hover behavior on touch on mobile devices */
+    .btn-8bit:hover::after { box-shadow: var(--bottom-box-shadow); }
+}
+.form-8bit {
+    cursor: default;
+}
+.form-8bit input {
+    width: 150px;
+    padding: 6px 4px;
+    z-index: 2;
+
+    font-size: 14px;
+    outline: none;
+    border: none;
+    border-radius: 0; 
+    box-shadow: inset -2px -2px rgb(150, 150, 150);
+}
+.row-form {
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+#ip-form {
+    position: relative;
+    padding: 5px 10px;
+    max-width: 80%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+
+    color: #212529;
+    background-color: #f7d51d;
+    --color-shadow: #e59400;
+}
+#save-ip-btn {
+    z-index: 2;
+    width: 100px;
+    padding: 5px 5px;
+    color: #212529;
+    background-color: rgb(200, 200, 200);
+    --color-shadow: rgb(150, 150, 150);
+}
+
+#camera-info-time {
+    margin-left: auto;
+    width: 150px;
+    height: 40px;
+    font-size: 12px;
+
+    color: #212529;
+    background-color: #b8cfb9;
+    --color-shadow: #839c77;
+}
+#camera-info-time:has(#live-time.hidden) {
+    color: #e1e6ea;
+    background-color: #5d8da2;
+    --color-shadow: #4e5a6d;
+}
+
+
+#main-container {
+    position: relative;
+    width: 100%;
+    height: min(100cqw, 100%);
+    max-height: 900px;
+
+    cursor: pointer;
+    overflow: scroll;
+    scroll-snap-type: x mandatory;
+
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transform: none !important;
+    background-color: transparent;
+}
+button:active {
+    transform: scale(0.95);
+}
+.hidden {
+    display: none !important;
+}
+.backdrop {
+    position: fixed;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#camera,
+#tv {
+    position: absolute;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+
+    perspective: 800px;
+    perspective-origin: center center;
+}
+#tv {
+    right: 0 !important;
+}
+
+#camera img,
+#tv img{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    object-fit: contain;
+}
+
+
+#lenses-list-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-height: 100%;
+
+    box-sizing: border-box;
+    padding-top: 8%;
+    z-index: 1;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    container-type: inline-size;
+}
+#main-container::-webkit-scrollbar,
+#main-container::-webkit-scrollbar-track,
+#main-container::-webkit-scrollbar-thumb,
+#lenses-list-container::-webkit-scrollbar,
+#lenses-list-container::-webkit-scrollbar-track,
+#lenses-list-container::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+#lenses-list {
+    list-style: none;
+    cursor: pointer;
+}
+#lenses-list li:not(:first-child) {
+    border-top: 1px solid #eae3c3;
+}
+
+#lenses-list li{
+    padding: 5cqw 5cqw;
+    font-size: 4cqw;
+    white-space: nowrap;
+    color: black;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;  /* show "..." for overflow */
+}
+#lenses-list li.selected,
+#lenses-list li:active{
+    color: #3b7b7a;
+    background-color: rgba(234, 227, 195, 0.85);
+}
+#camera-info-battery {
+    position: absolute;
+    bottom: -10%;
+    right: 3%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#camera-info-battery svg {
+    fill: black;
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.page-bar {
+    position: absolute;
+    width: 100%;
+    height: var(--bar-margin);
+    padding: 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+#top-bar { top: 0; }
+#bottom-bar { bottom: 0; }
+#lenses-btn {
+    height: 40px;
+    aspect-ratio: 1/1;
+
+    color: #212529;
+    background-color: rgb(200, 200, 200);
+    --color-shadow: rgb(150, 150, 150);
+}
+#connection-btn {
+    width: 150px;
+    height: 40px;
+    font-size: 12px;
+
+    color: #212529;
+    background-color: #f7d51d;
+    --color-shadow: #e59400;
+
+    display: inline;
+}
+.spinner::after {
+  content: " |";
+  animation: spin 0.6s infinite;
+}
+@keyframes spin {
+  0%   { content: " |"; }
+  25%  { content: " /"; }
+  50%  { content: " -"; }
+  75%  { content: " \\"; }
+  100% { content: " |"; }
+}
+#connection-btn.disabled {
+    color: #212529;
+    background-color: rgb(200, 200, 200);
+    --color-shadow: rgb(150, 150, 150);
+}
+#connection-btn.live {
+    color: #e1e6ea;
+    background-color: #704b63;
+    --color-shadow: #4e3a4a;
+}
+#ip-btn {
+    height: 40px;
+    aspect-ratio: 1/1; 
+
+    color: #212529;
+    background-color: #f7d51d;
+    --color-shadow: #e59400;
+}
+#ip-btn img {
+    object-fit: contain;
+    image-rendering: pixelated;
+    width: 100%;
+}
+
+
+#track {
+    position: relative;
+    height: 100%;
+    width: 250%;
+
+    transition: transform 0.35 ease;
+}
+
+#track div {
+    scroll-snap-align: start;  /* Scroll snap effect */
+    --padding: calc((100cqw - 100%) / 2);
+}
+#track div img {
+    height: 100%;
+    object-fit: contain;
+    --padding: calc((100cqw - 100%) / 2);
+    padding: 0 var(--padding);
+}
+
+#camera-lens-top-image {
+    clip-path: circle(0% at center);
+    transition: clip-path 0.5s linear;
+}
+
+#camera-lens-top-image.open {
+    clip-path: circle(25vmin at center);
+}
+#tv-screen {
+    --left: 14%;
+    position: absolute;
+    top: 18%;
+    left: calc(var(--left) + var(--padding));
+    width: 48%;
+    aspect-ratio: 50 / 47;
+    transform-style: preserve-3d;
+}
+#tv-screen-perspective {
+    width: 100%;
+    height: 100%;
+
+    transform-origin: center center;
+    transform: rotate3d(0.1, 1, -0.2, -10deg);
+
+    object-fit: fill;
+}
+
+
+.clipboard {
+    position: absolute;
+    --width: min(70%, calc(75cqh * 210 / 297));
+    width: var(--width);
+
+    max-width: 80%;
+    aspect-ratio: 210 / 297;
+
+    background-color: #80471c;
+
+    --border: 8px;
+    --pixel-border: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(55,29,16)"/></svg>');
+
+    font-family: "Press Start 2P";
+
+    border: var(--border) solid;
+    border-image: var(--pixel-border) 2 / 2 / 2 stretch;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-height: 420px) {
+    .clipboard {
+        height: 70%;
+        width: 80%;
+        max-width: 350px;
+    }
+}
+.clip {
+    position: absolute;
+    top: -12px;
+    width: 45%;
+    height: 6%;
+    pointer-events: none;
+
+    color: #212529;
+    background-color: rgb(200, 200, 200);
+
+    z-index: 2;
+
+    --pixel-border: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(150,150,150)"/></svg>');
+
+    border: var(--border) solid;
+    border-image: var(--pixel-border) 2 / 2 / 2 stretch;
+}
+.clip::after {
+    content: "";
+    position: absolute;
+    bottom: calc(99.5% + var(--border));  /* 99.5% vs 100% prevents border from being visible on resize */
+    left: 25%;
+    width: calc(50% - calc(var(--border) * 2));
+    height: calc(50% - calc(var(--border) * 2));
+
+    color: #212529;
+    background-color: rgb(200, 200, 200);
+
+    z-index: 1;
+
+    --pixel-border: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z " fill="rgb(150,150,150)"/></svg>');
+
+    border: var(--border) solid;
+    border-image: var(--pixel-border) 2 / 2 / 2 stretch;
+}
+.clip::before {
+    position: absolute;
+    --color-shadow: rgb(175, 175, 175);
+    --border: 8px;
+    --border-width: 6px;
+    --bottom-box-shadow: inset calc(1 * var(--border-width)) calc(-1 * var(--border-width)) var(--color-shadow);
+    top: calc(-1 * var(--border));
+    right: calc(-1 * var(--border));
+    bottom: calc(-1 * var(--border));
+    left: calc(-1 * var(--border));
+    content: "";
+    box-shadow: var(--bottom-box-shadow);
+    z-index: 2;
+}
+
+.paper {
+    position: relative;
+    width: 90%;
+    height: 90%;
+
+    background-color: white;
+    --color-shadow: rgb(55,29,16);
+    --box-shadow: inset var(--border) calc(-1 * var(--border)) var(--color-shadow);
+}
+
+.paper::after {
+    position: absolute;
+    top: calc(1 * var(--border));
+    right: calc(1 * var(--border));
+    bottom: calc(-1 * var(--border));
+    left: calc(-1 * var(--border));
+    content: "";
+    box-shadow: var(--box-shadow);
+}

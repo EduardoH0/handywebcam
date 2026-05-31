@@ -1,0 +1,81 @@
+<!-- <!DOCTYPE html> -->
+<html>
+<head>
+    <link rel="stylesheet" href="static/style.css">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="static/manifest.json">
+
+</head>
+<body>
+
+
+<button id="main-container">
+
+    <div id="track">
+        
+        <div id="camera">
+            <img id="camera-lens-bottom-image" src="assets/bottom-camera.png" alt="">
+            <img id="camera-lens-top-image" src="assets/top-camera.png" alt=""/>
+        </div>
+
+        <div id="tv">
+            <img class="tv-preview" src="assets/bottom-tv.png" alt="">
+            <div id="tv-screen">
+                <video id="tv-screen-perspective" autoplay playsinline muted></video>
+            </div>
+            <img id="bottom-image" src="assets/top-tv.png" alt="">
+        </div>
+
+    </div>
+
+</button>
+
+<div class="page-bar" id="top-bar">
+    <button class="btn-8bit" id="lenses-btn">
+        <img id="" src="assets/videocamicon.png" alt=""/>
+    </button>
+    <button class="btn-8bit" id="camera-info-time">
+        <span id="current-time">--:--:--</span>
+        <span class="hidden" id="live-time">--:--:--</span>
+    </button>
+</div>
+<div class="page-bar" id="bottom-bar">
+    <button class="btn-8bit" id="ip-btn">
+        <img id="" src="assets/socketicon.png" alt=""/>
+    </button>
+    <button class="btn-8bit" id="connection-btn">
+        <span id="text-connection-btn">CONNECT</span>
+        <span class="spinner hidden" id="spinner-connection-btn"></span>
+    </button>
+</div>
+
+<div class="backdrop hidden" id="ip-bckdrp-container">
+    <form class="form-8bit" id="ip-form">
+        <div class="row-form">
+            <label for="ip">IP</label>
+            <input type="text" id="ip" name="ip" required placeholder="IP or DNS" autocomplete="off"/>
+        </div>
+        <div class="row-form">
+            <label for="port">PORT</label>
+            <input type="text" id="port" name="port" required placeholder="PORT" autocomplete="off"/>
+        </div>
+        <button class="btn-8bit" id="save-ip-btn" type="submit">SAVE</button>
+    </form>
+</div>
+
+<div class="backdrop hidden" id="lenses-bckdrp-container">
+    <div class="clipboard">
+        <div class="clip"></div>
+        <div class="paper">
+            <div id="lenses-list-container">
+                <ul id="lenses-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script type="module" src="static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+    "short_name": "HandyWebcam",
+    "name": "HandyWebcam",
+    "display": "fullscreen",
+    "start_url": "/handywebcam/",
+    "scope": "/handywebcam/",
+    "background_color": "#89baab",
+    "theme_color": "#89baab",
+    "icons": [
+        {
+            "src": "/static/images/icons/webcam.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}
